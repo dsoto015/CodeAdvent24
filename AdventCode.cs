@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Text.RegularExpressions;
 
 namespace CodeAdvent24
 {
@@ -52,9 +53,11 @@ namespace CodeAdvent24
                         increasing = false;
 
                     if (reportArray[j] == reportArray[j - 1]) 
-                    { 
-                        increasing = decreasing = false; 
-                        break; }
+                    {
+                        increasing = false; 
+                        decreasing = false; 
+                        break; 
+                    }
                 }
                 bool isMonotonic = increasing || decreasing;
 
@@ -126,8 +129,9 @@ namespace CodeAdvent24
                         increasing = false;
 
                     if (report[j] == report[j - 1])
-                    { 
-                        increasing = decreasing = false;
+                    {
+                        increasing = false;
+                        decreasing = false;
                         break;
                     }
                 }
@@ -148,6 +152,73 @@ namespace CodeAdvent24
 
             Console.WriteLine($"Safe Reports with Dampener = {safeCounter}");
             Assert.AreEqual(400, safeCounter);
+        }
+
+        [TestMethod]
+        public void DayThreePartOne()
+        {
+            var input = PuzzleInputs.DayThree;
+            var pattern = @"mul\(\d+,\d+\)";
+            var regex = new Regex(pattern, RegexOptions.IgnoreCase);
+            var numbersToAdd = new List<int>();
+            var matches = regex.Matches(input);
+
+            foreach (Match match in matches)
+            {
+                if(match.Success)
+                {
+                    var mulMatch = match.Value;
+                    var factors = mulMatch.Split('(', ')')[1].Split(',').Select(x => int.Parse(x)).ToList();
+                    var product = factors[0] * factors[1];
+                    numbersToAdd.Add(product);
+                }
+            }
+            var sum = numbersToAdd.Sum();
+            Assert.AreEqual(188741603, sum);
+        }
+
+        [TestMethod]
+        public void DayThreePartTwo()
+        {
+            var input = PuzzleInputs.DayThree;
+
+            var mulPattern = @"mul\(\d+,\d+\)";
+            var dontPattern = @"don't\(\)";
+            var doPattern = @"do\(\)";
+
+            var regex = new Regex($"{mulPattern}|{dontPattern}|{doPattern}", RegexOptions.IgnoreCase);
+            var matches = regex.Matches(input);
+           
+            var cleanedInput = new List<string>();
+            var shouldKeep = true;
+            var dontPhrase = "don't()";
+            var doPhrase = "do()";
+
+            var numbersToAdd = new List<int>();
+            foreach (Match match in matches)
+            {
+                var phrase = match.Value;
+                if(phrase == doPhrase)
+                {
+                    shouldKeep = true;
+                }
+
+                if(phrase == dontPhrase)
+                {
+                    shouldKeep = false;
+                    continue;
+                }
+
+                if (shouldKeep && phrase != doPhrase)
+                {
+                    var factors = phrase.Split('(',')')[1].Split(',').Select(x => int.Parse(x)).ToArray();
+                    var product = factors[0] * factors[1];
+                    numbersToAdd.Add(product);
+                }
+            }
+
+            var sum = numbersToAdd.Sum();
+            Assert.AreEqual(67269798, sum);
         }
 
     }
