@@ -221,5 +221,34 @@ namespace CodeAdvent24
             Assert.AreEqual(67269798, sum);
         }
 
+        [TestMethod]
+        public void DayFourDayOne()
+        {
+            var input = PuzzleInputs.DayFour;
+            var wordSearchArr = input.Split("\r\n");
+            var twoDimensionalArr = new string[wordSearchArr.Length, wordSearchArr[0].Length];
+
+            for (int i = 0; i < wordSearchArr.Length; i++)
+            {
+                for (int j = 0; j < wordSearchArr[i].Length; j++)
+                {
+                    twoDimensionalArr[i, j] = wordSearchArr[i][j].ToString();
+                }
+            }
+
+            var isXmas = (twoDimensionalArr);
+            Console.WriteLine($"{twoDimensionalArr}");
+
+            bool IsXmasWord(string[,] twoDimensionalArr)
+            {
+                for(int i = 0; i < twoDimensionalArr.Length; i++)
+                {
+
+                }
+            }
+
+        }
+
+
     }
 }

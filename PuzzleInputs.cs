@@ -11,5 +11,6 @@ namespace CodeAdvent24
         public static string DayOne = FileHelper.GetContents("DayOne.txt");
         public static string DayTwo = FileHelper.GetContents("DayTwo.txt");
         public static string DayThree = FileHelper.GetContents("DayThree.txt");
+        public static string DayFour = FileHelper.GetContents("DayFour.txt");
     }
 }
