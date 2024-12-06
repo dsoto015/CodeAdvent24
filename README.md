@@ -1,5 +1,8 @@
 # Advent of Code 2024
 
+## 📝 How to Run
+
+1. Create a folder called Inputs in the repo directory and create txt files named Day***Day#***.txt with the inputs from the site as contents. Run the unit tets in AdventCode.cs
 ---
 
 ## 📅 Puzzles
