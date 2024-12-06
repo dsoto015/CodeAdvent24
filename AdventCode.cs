@@ -1,5 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Drawing;
 using System.Text.RegularExpressions;
+using System.Xml.Serialization;
 
 namespace CodeAdvent24
 {
@@ -236,16 +238,65 @@ namespace CodeAdvent24
                 }
             }
 
-            var isXmas = (twoDimensionalArr);
-            Console.WriteLine($"{twoDimensionalArr}");
-
-            bool IsXmasWord(string[,] twoDimensionalArr)
+            var totalXmasCount = 0;
+            for (int i = 0; i < wordSearchArr.Length; i++)
             {
-                for(int i = 0; i < twoDimensionalArr.Length; i++)
+                for (int j = 0; j < wordSearchArr[i].Length; j++)
                 {
-
+                    var xmasCount = GetXmasCountFromReference(i, j, twoDimensionalArr[i, j]);
+                    totalXmasCount += xmasCount;
                 }
             }
+
+            Console.WriteLine($"total xmas count = {totalXmasCount}");
+
+
+            int GetXmasCountFromReference(int xCoord, int yCoord, string letter)
+            {
+                var eightPossible = new List<string>();
+                var referenceLetter = letter.ToUpper();
+
+                //8 possible directions
+                var directions = new (int dx, int dy)[]
+                {
+                    (0, 1),
+                    (1, 1),
+                    (1, 0),
+                    (1, -1),
+                    (0, -1),
+                    (-1, -1),
+                    (-1, 0),
+                    (-1, 1)
+                };
+
+                foreach (var (dx, dy) in directions)
+                {
+                    var letters = new List<string> { referenceLetter };
+                    for (int step = 1; step <= 3; step++)
+                    {
+                        var coord = (x: xCoord + (dx * step), y: yCoord + (dy * step));
+                        letters.Add(GetLetter(coord));
+                    }
+
+                    var sortedLetters = letters.Select(l => l.OrderBy(c => "XMAS".IndexOf(c)));
+                    eightPossible.Add(String.Concat(sortedLetters));
+                }
+
+                return eightPossible.Count(x => x == "XMAS");
+
+                string GetLetter((int x, int y) coord)
+                {
+                    if (coord.x < 0 || coord.x >= twoDimensionalArr.GetLength(0) ||
+                        coord.y < 0 || coord.y >= twoDimensionalArr.GetLength(1))
+                    {
+                        return string.Empty;
+                    }
+
+                    return twoDimensionalArr[coord.x, coord.y].ToUpper();
+                }
+            }
+
+
 
         }
 
