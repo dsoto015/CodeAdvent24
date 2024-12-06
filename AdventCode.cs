@@ -253,9 +253,6 @@ namespace CodeAdvent24
 
             int GetXmasCountFromReference(int xCoord, int yCoord, string letter)
             {
-                var eightPossible = new List<string>();
-                var referenceLetter = letter.ToUpper();
-
                 //8 possible directions
                 var directions = new (int dx, int dy)[]
                 {
@@ -269,20 +266,23 @@ namespace CodeAdvent24
                     (-1, 1)
                 };
 
+                var referenceLetter = letter.ToUpper();
+                var eightPossible = new List<string>();
+
                 foreach (var (dx, dy) in directions)
                 {
                     var letters = new List<string> { referenceLetter };
+
                     for (int step = 1; step <= 3; step++)
                     {
-                        var coord = (x: xCoord + (dx * step), y: yCoord + (dy * step));
+                        var coord = (x: xCoord + dx * step, y: yCoord + dy * step);
                         letters.Add(GetLetter(coord));
                     }
 
-                    var sortedLetters = letters.Select(l => l.OrderBy(c => "XMAS".IndexOf(c)));
-                    eightPossible.Add(String.Concat(sortedLetters));
+                    eightPossible.Add(String.Concat(letters.Where(l => !string.IsNullOrEmpty(l)).OrderBy(c => "XMAS".IndexOf(c))));
                 }
 
-                return eightPossible.Count(x => x == "XMAS");
+                return eightPossible.Count(word => word == "XMAS");
 
                 string GetLetter((int x, int y) coord)
                 {
@@ -295,6 +295,7 @@ namespace CodeAdvent24
                     return twoDimensionalArr[coord.x, coord.y].ToUpper();
                 }
             }
+
 
 
 
